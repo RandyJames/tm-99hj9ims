@@ -1,2 +1,7 @@
+# Not for indexing. The noindex/nofollow meta tag on the page is what
+# keeps this out of search results. Crawling is allowed so that link
+# previews (iMessage, Facebook, Slack, WhatsApp) can read the page's
+# Open Graph tags -- a blanket Disallow would also block those, and
+# would additionally stop search engines from ever SEEING the noindex.
 User-agent: *
-Disallow: /
+Allow: /
