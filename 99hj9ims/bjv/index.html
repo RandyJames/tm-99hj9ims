@@ -103,6 +103,8 @@ a{color:inherit}
 .meta{font-size:13px;color:var(--mute)}
 .meta .note{color:var(--orange-d);font-weight:600}
 .res{font-weight:800;padding:6px 10px;border-radius:8px;text-align:center;min-width:64px;font-size:15px}
+.res.scrim{background:transparent;border:1px dashed var(--line);color:var(--mute);font-weight:600;font-style:italic}
+.scrimbadge{display:inline-block;background:transparent;border:1px solid var(--line);color:var(--mute);font-weight:700;font-size:10px;letter-spacing:.5px;padding:1px 7px;border-radius:999px;vertical-align:middle}
 .res.W{background:var(--win-bg);color:var(--win)} .res.L{background:var(--loss-bg);color:var(--loss)} .res.T{background:var(--tie-bg);color:var(--tie)}
 .res.up{background:transparent;color:var(--mute);font-weight:600;border:1px dashed var(--line)}
 .vids{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
@@ -147,7 +149,8 @@ const tabs = document.getElementById('tabs'), panels = document.getElementById('
 let filter = 'all';
 let schedFilter = 'all';
 
-function resClass(r){ if(!r) return 'up'; const c=r[0]; return (c==='W'||c==='L'||c==='T') && r!=='TBD' ? c : 'up'; }
+function isScrim(g){ return /scrimmage/i.test(g.n||'') || g.r==='Scrimmage'; }
+function resClass(r,g){ if(g && isScrim(g)) return 'scrim'; if(!r) return 'up'; const c=r[0]; return (c==='W'||c==='L'||c==='T') && r!=='TBD' ? c : 'up'; }
 
 function render(){
   TEAMS.forEach((t,i) => {
@@ -161,13 +164,13 @@ function render(){
       if(filter==='upcoming') return !fmt(g.d).past && !g.r;
       return true;
     }).map(g => {
-      const f = fmt(g.d); const rc = resClass(g.r);
+      const f = fmt(g.d); const rc = resClass(g.r, g); const scrim = isScrim(g);
       const isNext = !nextMarked && !f.past && !g.r && filter!=='video'; if(isNext) nextMarked = true;
       const vids = g.v.map(v => `<a class="btn ${v.k}" href="${v.u}" target="_blank" rel="noopener">${ {clip:'✂️',yt:'▶️',veo:'🎥',wavm:'📺'}[v.k] } ${v.l}</a>`).join('');
       return `<div class="game ${isNext?'next':''}">
         <div class="date"><div class="dow">${f.dow}</div><div class="day">${f.day}</div><div class="mon">${f.mon}</div></div>
         <div><div class="opp"><span class="ha ${g.ha}">${g.ha==='H'?'HOME':'AWAY'}</span>${g.ha==='H'?'vs':'@'} ${g.opp}</div>
-             <div class="meta">${g.t}${isNext?' · <span class="nextbadge">NEXT GAME</span>':''}${g.n?' · <span class="note">'+g.n+'</span>':''}${(!g.v.length && f.past && g.r && g.r!=='TBD' && g.r!=='Canceled' && !g.r.startsWith('PPD'))?' · no video':''}</div></div>
+             <div class="meta">${g.t}${isNext?' · <span class="nextbadge">NEXT GAME</span>':''}${(g.n && !scrim)?' · <span class="note">'+g.n+'</span>':''}${scrim?' · <span class="scrimbadge">SCRIMMAGE · not in record</span>':''}${(!g.v.length && f.past && g.r && g.r!=='TBD' && g.r!=='Canceled' && !g.r.startsWith('PPD'))?' · no video':''}</div></div>
         <div class="res ${rc}">${g.r || (f.past?'—':'upcoming')}</div>
         <div class="vids">${vids}</div>
       </div>`;
@@ -225,7 +228,7 @@ TEAMS.forEach(t => {
   const nv = t.games.reduce((n,g)=>n+g.v.length,0);
   const p = document.createElement('section'); p.className='panel'; p.id='p-'+t.key; p.style.setProperty('--tc', t.color); p.style.setProperty('--tcsoft', t.color+'40');
   p.innerHTML = `<div class="teamhead"><h2>${t.name}</h2>
-      <span class="rec"><span class="w">${t.rec[0]} W</span><span class="l">${t.rec[1]} L</span><span class="t">${t.rec[2]} T</span></span>
+      <span class="rec" title="Win-loss-tie from countable games only. Scrimmages, cancellations and postponements are excluded (matches Arbiter)."><span class="w">${t.rec[0]} W</span><span class="l">${t.rec[1]} L</span><span class="t">${t.rec[2]} T</span></span>
       <span class="meta">${nv} video${nv===1?'':'s'} · <a href="${t.maxpreps}" target="_blank" rel="noopener">MaxPreps</a></span></div>
     <div class="albums">${t.photos.length ? t.photos.map(a=> t.thumbs.length
         ? `<a class="strip" href="${a.u}" target="_blank" rel="noopener" title="${a.l}"><div class="grid">${t.thumbs.map(u=>`<img src="${u}=w480-h320-c" alt="" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">`).join('')}</div><div class="cap">📸 ${a.l.replace(/ \(Google Photos.*$/,'')}<span>View album →</span></div></a>`
