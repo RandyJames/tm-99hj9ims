@@ -111,6 +111,11 @@
   .slot.empty{border:2px dashed rgba(255,255,255,.55);background:rgba(0,0,0,.14)}
   .slot.backup.empty{border-style:dotted;height:36px;opacity:.9}
   .slot .tag{position:absolute;left:5px;top:50%;transform:translateY(-50%);font-family:var(--disp);font-size:11px;color:rgba(255,255,255,.7);pointer-events:none}
+  .slot.empty{cursor:pointer}
+  .slot .add{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--disp);font-weight:400;font-size:22px;line-height:1;color:rgba(255,255,255,.6);pointer-events:none}
+  .slot.empty:hover .add{color:var(--accent)}
+  .pick-grp{flex-basis:100%;font-family:var(--disp);font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:8px 2px 2px}
+  .cu-pick .rmv{color:#e8792b}
   .slot.drop-hi{background:rgba(232,121,43,.35);border-color:var(--accent)!important;border-style:solid}
 
   .chip{display:flex;align-items:center;gap:8px;background:var(--chip);color:var(--chip-ink);border:1px solid var(--chip-line);border-radius:8px;padding:3px 8px 3px 3px;height:100%;width:100%;box-shadow:0 1px 2px rgba(0,0,0,.28);cursor:grab;touch-action:none;user-select:none;font-size:14.5px;font-weight:600;line-height:1;overflow:hidden}
@@ -227,7 +232,7 @@
   <header>
     <div>
       <h1 class="title">Position Planner <span id="rosterLabel">· JV Girls</span></h1>
-      <p class="sub">Formation <b><span id="formLabel">4-2-3-1</span></b> — pick per roster &amp; per half. Each half keeps its own lineup — set the 1st half, hit <b>Copy&nbsp;→</b>, then switch halves and change the keeper. Top slot is the <b>starter&nbsp;(1)</b>, bottom the <b>backup&nbsp;(2)</b>. <b>Save</b> exports a readable copy you can <b>Import</b> back later. Auto-saves as you go.</p>
+      <p class="sub">Formation <b><span id="formLabel">4-2-3-1</span></b> — pick per roster &amp; per half. Each half keeps its own lineup — set the 1st half, hit <b>Copy&nbsp;→</b>, then switch halves and change the keeper. Top slot is the <b>starter&nbsp;(1)</b>, bottom the <b>backup&nbsp;(2)</b>. <b>Tap a spot</b> (or drag) to add a player. Auto-saves as you go.</p>
     </div>
   </header>
 
@@ -249,7 +254,8 @@
     </label>
     <button class="act" id="copyBtn">Copy → 2nd half</button>
     <button class="act save" id="saveBtn">Save / Export</button>
-    <button class="act save" id="imgBtn">Game-day images</button>
+    <button class="act save" id="imgBtn">Save game-day images</button>
+    <button class="act" id="imgSubsBtn">Images + subs</button>
     <button class="act" id="importBtn">Import</button>
     <input type="file" id="importFile" accept=".txt,.json,text/plain,application/json" hidden>
     <button class="act" id="printTeamBtn">Team sheet</button>
@@ -318,6 +324,13 @@
       <button class="act save" id="imgDl1">Download 1st half</button>
       <button class="act save" id="imgDl2">Download 2nd half</button>
     </div>
+  </div>
+</div>
+
+<div class="backdrop" id="pickModal" hidden>
+  <div class="modal cumodal">
+    <div class="modal-head"><h3 id="pickTitle">Add player</h3><button class="x" id="pickClose" aria-label="Close">&times;</button></div>
+    <div class="cu-list" id="pickList"></div>
   </div>
 </div>
 
@@ -557,7 +570,7 @@
       var pid = assign[sid];
       var isBackup = slot.classList.contains("backup");
       if(pid && BY_ID[pid]){ slot.classList.remove("empty"); slot.innerHTML = chipHTML(BY_ID[pid]); }
-      else{ slot.classList.add("empty"); slot.innerHTML = '<span class="tag">'+(isBackup?"2":"1")+'</span>'; }
+      else{ slot.classList.add("empty"); slot.innerHTML = '<span class="tag">'+(isBackup?"2":"1")+'</span><span class="add">+</span>'; }
     });
     var benched = activePlayers().filter(function(p){ return playerSlot(p.id)===null; });
     if(benched.length===0){
@@ -632,7 +645,7 @@
   function switchRoster(r){ if(r===curRoster||!ROSTERS[r]) return; save(); useRoster(r); halves=boards[r]; assign=halves[curHalf]; updateChrome(); render(); }
 
   // pointer drag
-  var drag=null, ghost=null, lastHi=null; var THRESH=4;
+  var drag=null, ghost=null, lastHi=null, lastDragEnd=0; var THRESH=4;
   function originOf(el){ var s=el.closest("[data-slot]"); return s?s.getAttribute("data-slot"):"bench"; }
   function targetAt(x,y){
     var el=document.elementFromPoint(x,y); if(!el) return null;
@@ -644,12 +657,31 @@
     if(t==="bench"){ var b=document.getElementById("bench"); if(b){b.classList.add("drop-hi"); lastHi=b;} }
     else{ var s=document.querySelector('[data-slot="'+t+'"]'); if(s){ s.classList.add("drop-hi"); lastHi=s; } } }
 
+  // auto-scroll the page while dragging near the top/bottom edge (so you can
+  // carry a player between the bench and the pitch on a small screen)
+  var scrollRAF=null;
+  function autoScrollStep(){
+    if(!drag || !drag.on){ scrollRAF=null; return; }
+    var zone=100, maxV=16, h=(window.innerHeight||document.documentElement.clientHeight), y=drag.ly, vy=0;
+    if(y<zone) vy=-maxV*(zone-y)/zone;
+    else if(y>h-zone) vy=maxV*(y-(h-zone))/zone;
+    if(vy!==0){
+      var before=window.pageYOffset;
+      window.scrollBy(0, vy);
+      if(window.pageYOffset!==before){ if(ghost){ ghost.style.left=drag.lx+"px"; ghost.style.top=drag.ly+"px"; } highlight(targetAt(drag.lx, drag.ly)); }
+    }
+    scrollRAF=requestAnimationFrame(autoScrollStep);
+  }
+  function startAutoScroll(){ if(scrollRAF==null) scrollRAF=requestAnimationFrame(autoScrollStep); }
+  function stopAutoScroll(){ if(scrollRAF!=null){ cancelAnimationFrame(scrollRAF); scrollRAF=null; } }
+
   document.addEventListener("pointerdown", function(e){
     var chip=e.target.closest("[data-player]"); if(!chip) return;
-    drag={ pid:chip.getAttribute("data-player"), origin:originOf(chip), sx:e.clientX, sy:e.clientY, on:false, src:chip };
+    drag={ pid:chip.getAttribute("data-player"), origin:originOf(chip), sx:e.clientX, sy:e.clientY, lx:e.clientX, ly:e.clientY, on:false, src:chip };
   });
   window.addEventListener("pointermove", function(e){
     if(!drag) return;
+    drag.lx=e.clientX; drag.ly=e.clientY;
     if(!drag.on){
       if(Math.abs(e.clientX-drag.sx)<THRESH && Math.abs(e.clientY-drag.sy)<THRESH) return;
       drag.on=true;
@@ -658,6 +690,7 @@
       ghost.innerHTML=chipHTML(BY_ID[drag.pid]).replace(/^<div class="chip[^"]*"[^>]*>/,"").replace(/<\/div>$/,"");
       document.body.appendChild(ghost);
       if(drag.src) drag.src.style.opacity="0.35";
+      startAutoScroll();
     }
     if(ghost){ ghost.style.left=e.clientX+"px"; ghost.style.top=e.clientY+"px"; }
     highlight(targetAt(e.clientX,e.clientY));
@@ -665,13 +698,54 @@
   }, {passive:false});
   window.addEventListener("pointerup", function(e){
     if(!drag) return;
+    stopAutoScroll();
     if(drag.on){ var t=targetAt(e.clientX,e.clientY); clearHi();
       if(ghost){ ghost.remove(); ghost=null; } if(drag.src) drag.src.style.opacity="";
       moveTo(drag.pid, drag.origin, t);
+      lastDragEnd=Date.now();
     }
     drag=null;
   });
-  window.addEventListener("pointercancel", function(){ if(ghost){ghost.remove();ghost=null;} if(drag&&drag.src)drag.src.style.opacity=""; clearHi(); drag=null; });
+  window.addEventListener("pointercancel", function(){ stopAutoScroll(); if(ghost){ghost.remove();ghost=null;} if(drag&&drag.src)drag.src.style.opacity=""; clearHi(); drag=null; });
+
+  // tap-to-place: tapping a spot opens a picker to add / swap / remove a player
+  var curPickSlot=null;
+  function pickBtn(p){
+    return '<button class="cu-pick" data-pick="'+p.id+'">'+(p.num!=null?'<b>'+p.num+'</b> ':'')+firstLast(p.name)
+      +(p.swing?' <span class="cu-sw">SW</span>':'')+(isBorrowed(p.id)?' <span class="cu-sw" style="background:#7fb8e6;color:#0b3a63">'+(curRoster==="jv"?"V":"JV")+'</span>':'')+'</button>';
+  }
+  function openPicker(slotId){
+    if(!/^[A-Z]+-[12]$/.test(slotId)) return;
+    curPickSlot=slotId;
+    var idbase=slotId.replace(/-[12]$/,''), posObj=null;
+    POSITIONS.forEach(function(p){ if(p.id===idbase) posObj=p; });
+    var role=/-1$/.test(slotId)?"starter":"backup";
+    document.getElementById("pickTitle").textContent=(posObj?posObj.label:idbase)+" · "+role;
+    var occupant=assign[slotId], html="";
+    if(occupant && BY_ID[occupant]){ html+='<button class="cu-pick" data-clear="1"><span class="rmv">✕ Remove '+firstLast(BY_ID[occupant].name)+'</span></button>'; }
+    var placed={}; Object.keys(assign).forEach(function(k){ if(assign[k]) placed[assign[k]]=1; });
+    var avail=activePlayers().filter(function(p){ return !placed[p.id]; });
+    var onfield=activePlayers().filter(function(p){ return placed[p.id] && playerSlot(p.id)!==slotId; });
+    if(avail.length){ html+='<div class="pick-grp">On the bench</div>'; avail.forEach(function(p){ html+=pickBtn(p); }); }
+    if(onfield.length){ html+='<div class="pick-grp">On the field (tap to move here)</div>'; onfield.forEach(function(p){ html+=pickBtn(p); }); }
+    if(!avail.length && !onfield.length && !occupant){ html+='<div class="cu-empty">No available players — everyone is placed.</div>'; }
+    document.getElementById("pickList").innerHTML=html;
+    document.getElementById("pickModal").hidden=false;
+  }
+  function closePicker(){ document.getElementById("pickModal").hidden=true; curPickSlot=null; }
+  document.getElementById("pickList").addEventListener("click", function(e){
+    if(!curPickSlot) return;
+    if(e.target.closest("[data-clear]")){ delete assign[curPickSlot]; closePicker(); render(); return; }
+    var pk=e.target.closest("[data-pick]"); if(!pk) return;
+    var pid=pk.getAttribute("data-pick"); moveTo(pid, playerSlot(pid)||"bench", curPickSlot); closePicker();
+  });
+  document.getElementById("pickClose").addEventListener("click", closePicker);
+  document.getElementById("pickModal").addEventListener("click", function(e){ if(e.target.id==="pickModal") closePicker(); });
+  pitch.addEventListener("click", function(e){
+    if(Date.now()-lastDragEnd<400) return; // ignore the click that follows a real drag
+    var slot=e.target.closest("[data-slot]"); if(!slot) return;
+    openPicker(slot.getAttribute("data-slot"));
+  });
 
   // persistence
   function save(){
@@ -947,27 +1021,31 @@
     }
     return cv;
   }
-  var imgModal=document.getElementById("imgModal"); var imgData={1:null,2:null};
-  function imgMode(){ var r=document.querySelector('input[name="imgmode"]:checked'); return r?r.value:"bench"; }
-  function openImages(){
-    var body=document.getElementById("imgBody"); body.innerHTML="";
-    var mode=imgMode();
-    [1,2].forEach(function(h){
-      var cv=drawLineup(h, mode); var url=cv.toDataURL("image/png"); imgData[h]=url;
-      var wrap=document.createElement("div"); wrap.className="img-cap";
-      wrap.innerHTML='<div class="img-lab">'+(h===1?"1st Half":"2nd Half")+'</div>';
-      var im=document.createElement("img"); im.src=url; im.alt=(h===1?"1st":"2nd")+" half lineup";
-      wrap.appendChild(im); body.appendChild(wrap);
-    });
-    imgModal.hidden=false;
+  // Game-day images: one tap saves BOTH halves (1st + 2nd) straight to the
+  // device — on a phone the download can be added to Photos.
+  var savingImgs=false;
+  async function saveBothImages(mode, btn){
+    if(savingImgs) return; savingImgs=true;
+    var orig=btn?btn.textContent:""; if(btn) btn.textContent="Saving…";
+    var ok=true;
+    try{
+      for(var h=1; h<=2; h++){
+        var cv=drawLineup(h, mode);
+        var url=cv.toDataURL("image/png");
+        var done=await saveFile("mhs-"+(curRoster==="jv"?"jv":"varsity")+"-"+(h===1?"1st":"2nd")+"-half"+(mode==="subs"?"-subs":"")+".png", dataURLtoBlob(url));
+        if(!done) ok=false;
+        await new Promise(function(r){ setTimeout(r, 500); }); // stagger so both saves land
+      }
+    }catch(e){ ok=false; }
+    savingImgs=false;
+    if(btn){ btn.textContent = ok ? "Saved both ✓" : "Save failed"; setTimeout(function(){ btn.textContent=orig; }, 1900); }
   }
-  function dlImg(h){ if(!imgData[h]) return; var tag=imgMode()==="subs"?"-with-subs":""; saveFile("jv-lineup-"+(h===1?"1st":"2nd")+"-half"+tag+".png", dataURLtoBlob(imgData[h])); }
-  document.querySelectorAll('input[name="imgmode"]').forEach(function(r){ r.addEventListener("change", openImages); });
-  document.getElementById("imgBtn").addEventListener("click", function(){ try{ if(document.fonts&&document.fonts.ready){ document.fonts.ready.then(openImages); setTimeout(openImages,400); } else openImages(); }catch(e){ openImages(); } });
-  document.getElementById("imgClose").addEventListener("click", function(){ imgModal.hidden=true; });
-  imgModal.addEventListener("click", function(e){ if(e.target===imgModal) imgModal.hidden=true; });
-  document.getElementById("imgDl1").addEventListener("click", function(){ dlImg(1); });
-  document.getElementById("imgDl2").addEventListener("click", function(){ dlImg(2); });
+  function imgClick(mode, btn){
+    try{ if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ saveBothImages(mode, btn); }); } else saveBothImages(mode, btn); }
+    catch(e){ saveBothImages(mode, btn); }
+  }
+  document.getElementById("imgBtn").addEventListener("click", function(){ imgClick("bench", this); });
+  document.getElementById("imgSubsBtn").addEventListener("click", function(){ imgClick("subs", this); });
 
   document.getElementById("clearBtn").addEventListener("click", function(){
     halves[curHalf]={}; assign=halves[curHalf]; render();
