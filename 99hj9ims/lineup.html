@@ -254,8 +254,8 @@
     </label>
     <button class="act" id="copyBtn">Copy → 2nd half</button>
     <button class="act save" id="saveBtn">Save / Export</button>
-    <button class="act save" id="imgBtn">Save game-day images</button>
-    <button class="act" id="imgSubsBtn">Images + subs</button>
+    <button class="act save" id="imgBtn">Save to Photos</button>
+    <button class="act" id="imgSubsBtn">Photos + subs</button>
     <button class="act" id="importBtn">Import</button>
     <input type="file" id="importFile" accept=".txt,.json,text/plain,application/json" hidden>
     <button class="act" id="printTeamBtn">Team sheet</button>
@@ -1021,31 +1021,40 @@
     }
     return cv;
   }
-  // Game-day images: one tap saves BOTH halves (1st + 2nd) straight to the
-  // device — on a phone the download can be added to Photos.
-  var savingImgs=false;
-  async function saveBothImages(mode, btn){
-    if(savingImgs) return; savingImgs=true;
-    var orig=btn?btn.textContent:""; if(btn) btn.textContent="Saving…";
-    var ok=true;
-    try{
-      for(var h=1; h<=2; h++){
-        var cv=drawLineup(h, mode);
-        var url=cv.toDataURL("image/png");
-        var done=await saveFile("mhs-"+(curRoster==="jv"?"jv":"varsity")+"-"+(h===1?"1st":"2nd")+"-half"+(mode==="subs"?"-subs":"")+".png", dataURLtoBlob(url));
-        if(!done) ok=false;
-        await new Promise(function(r){ setTimeout(r, 500); }); // stagger so both saves land
+  // Game-day images: both halves go to the native share sheet, where "Save
+  // Images" adds them to Photos on a phone; falls back to a download if the
+  // browser can't share files (e.g. desktop, or an embedded frame).
+  var busyImgs=false;
+  function imgFile(h, mode){
+    var cv=drawLineup(h, mode);
+    var blob=dataURLtoBlob(cv.toDataURL("image/png"));
+    return new File([blob], "mhs-"+(curRoster==="jv"?"jv":"varsity")+"-"+(h===1?"1st":"2nd")+"-half"+(mode==="subs"?"-subs":"")+".png", {type:"image/png"});
+  }
+  async function shareImages(mode, btn){
+    if(busyImgs) return; busyImgs=true;
+    var orig=btn?btn.textContent:"", files;
+    // build both PNGs synchronously so the share stays inside the tap gesture
+    try{ files=[imgFile(1,mode), imgFile(2,mode)]; }
+    catch(e){ busyImgs=false; if(btn){ btn.textContent="Couldn't build"; setTimeout(function(){btn.textContent=orig;},1800);} return; }
+    // 1) native share sheet -> "Save Images" / "Save to Photos"
+    if(navigator.canShare && navigator.canShare({files:files})){
+      try{
+        await navigator.share({ files:files, title:"MHS "+(curRoster==="jv"?"JV":"Varsity")+" lineup" });
+        busyImgs=false; if(btn){ btn.textContent="Shared ✓"; setTimeout(function(){btn.textContent=orig;},1600); } return;
+      }catch(e){
+        if(e && e.name==="AbortError"){ busyImgs=false; if(btn) btn.textContent=orig; return; } // user closed the sheet
+        // any other error: fall through to download
       }
-    }catch(e){ ok=false; }
-    savingImgs=false;
-    if(btn){ btn.textContent = ok ? "Saved both ✓" : "Save failed"; setTimeout(function(){ btn.textContent=orig; }, 1900); }
+    }
+    // 2) fallback: download both
+    if(btn) btn.textContent="Saving…"; var ok=true;
+    try{ for(var i=0;i<files.length;i++){ var d=await saveFile(files[i].name, files[i]); if(!d) ok=false; await new Promise(function(r){ setTimeout(r,500); }); } }
+    catch(e){ ok=false; }
+    busyImgs=false;
+    if(btn){ btn.textContent = ok ? "Saved ✓" : "Save failed"; setTimeout(function(){ btn.textContent=orig; }, 1900); }
   }
-  function imgClick(mode, btn){
-    try{ if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ saveBothImages(mode, btn); }); } else saveBothImages(mode, btn); }
-    catch(e){ saveBothImages(mode, btn); }
-  }
-  document.getElementById("imgBtn").addEventListener("click", function(){ imgClick("bench", this); });
-  document.getElementById("imgSubsBtn").addEventListener("click", function(){ imgClick("subs", this); });
+  document.getElementById("imgBtn").addEventListener("click", function(){ shareImages("bench", this); });
+  document.getElementById("imgSubsBtn").addEventListener("click", function(){ shareImages("subs", this); });
 
   document.getElementById("clearBtn").addEventListener("click", function(){
     halves[curHalf]={}; assign=halves[curHalf]; render();
