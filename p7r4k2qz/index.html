@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>Maynard Soccer Photo Albums</title>
+<meta name="description" content="Every Maynard soccer photo album — high school, middle school, MYS and club — 2021–2026.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Maynard Tigers Soccer">
+<meta property="og:title" content="📸 Maynard Soccer Photo Albums 2021–2026">
+<meta property="og:description" content="35 albums — high school, middle school, MYS and club. Tap an album to view or download.">
+<meta property="og:image" content="https://randyjames.github.io/tm-99hj9ims/p7r4k2qz/covers/hs26-bv.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F26A21">
+<style>
+:root{--orange:#F26A21;--orange-d:#C9520F;--ink:#161616;--paper:#fff;--bg:#F6F4F1;--mute:#6B6B6B;--line:#E6E2DC;
+  --hs:#F26A21;--sum:#0E9F8E;--ms:#1A73E8;--mys:#7B3FE4;--club:#C8264B;--gp:#1A73E8;--ic:#5E6570}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#F2F2F2;--paper:#1E1E1E;--bg:#121212;--mute:#A5A5A5;--line:#333;--orange-d:#FF8A4C;--gp:#6FA8FF;--ic:#B8BEC7}}
+:root[data-theme="dark"]{--ink:#F2F2F2;--paper:#1E1E1E;--bg:#121212;--mute:#A5A5A5;--line:#333;--orange-d:#FF8A4C;--gp:#6FA8FF;--ic:#B8BEC7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.hero{background:linear-gradient(135deg,#161616 0%,#2a2a2a 55%,var(--orange) 140%);color:#fff;padding:28px 16px 22px;position:relative;overflow:hidden}
+.hero::after{content:"📸";position:absolute;right:-6px;top:-14px;font-size:140px;opacity:.10;transform:rotate(-12deg)}
+.hero h1{margin:0;font-size:clamp(26px,6vw,40px);letter-spacing:-.5px;line-height:1.1}
+.hero h1 span{color:var(--orange)}
+.hero p{margin:8px 0 0;color:#e5e5e5;max-width:720px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px 48px}
+.ask{margin:12px 0 4px;font-size:14px;color:var(--mute)}
+.ask a{color:inherit}
+.tips{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px;font-size:13.5px}
+.tip{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:9px 12px}
+.tip b{display:block;margin-bottom:2px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 10px;margin-top:6px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 12px;font-size:14px;cursor:pointer;color:var(--ink);font-weight:600}
+.chip b{font-weight:600;opacity:.55;margin-left:2px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.year h2{font-size:28px;margin:22px 0 10px;display:flex;align-items:baseline;gap:10px;border-bottom:3px solid var(--orange);padding-bottom:4px}
+.year h2 small{font-size:13px;font-weight:600;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.pic{position:relative;aspect-ratio:3/2;background:var(--line)}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.noimg{display:flex;align-items:center;justify-content:center;height:100%;font-size:48px}
+.org{position:absolute;left:8px;top:8px;color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:999px;box-shadow:0 1px 6px rgba(0,0,0,.35)}
+.org.hs{background:var(--hs)}.org.sum{background:var(--sum)}.org.ms{background:var(--ms)}.org.mys{background:var(--mys)}.org.club{background:var(--club)}
+.body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:1px;flex:1}
+.season{font-size:12px;font-weight:700;color:var(--mute);text-transform:uppercase;letter-spacing:.5px}
+.team{font-size:17px;font-weight:800;line-height:1.2}
+.title{font-size:14px;color:var(--mute)}
+.foot{margin-top:auto;padding-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:12px;gap:8px}
+.src{font-weight:700;border:1px solid currentColor;border-radius:999px;padding:1px 8px}
+.src.gp{color:var(--gp)}.src.ic{color:var(--ic)}
+.cnt{color:var(--mute);font-weight:600}
+.year.hide,.card.hide{display:none}
+.bottom{margin-top:28px;font-size:13px;color:var(--mute)}
+@media (max-width:620px){.tips{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr;gap:10px}.team{font-size:15px}.title{font-size:13px}}
+@media (max-width:380px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap" style="padding-bottom:0">
+    <h1>Maynard Soccer <span>Photo Albums</span></h1>
+    <p>35 albums, 2021–2026: high school, middle school, Maynard Youth Soccer and club. Tap any album to open it. You can save or download photos from every album.</p>
+  </div>
+</header>
+<main class="wrap">
+  <p class="ask">Missing an album or need full-resolution originals? <a href="mailto:RandyJames@magnetbeans.com">RandyJames@magnetbeans.com</a> · +1 (978) 394-4009</p>
+  <div class="tips">
+    <div class="tip" style="--c:var(--gp)"><b>Google Photos albums</b>On a computer: open the album → ⋮ menu → <i>Download all</i>. On a phone: tap a photo → ⋮ → <i>Download</i>, or <i>Add to library</i> to put the whole album in your own Google Photos.</div>
+    <div class="tip" style="--c:var(--ic)"><b>iCloud albums</b>On an iPhone or Mac: open the link → <i>Join</i> or <i>Add to Photos</i>. In any browser: select photos → download. iCloud shares reduced-size copies, so email Randy if you need a full-size original.</div>
+  </div>
+  <div class="filters" id="filters"><button class="chip on" data-f="all">All <b>35</b></button><button class="chip" data-f="hs">High School <b>12</b></button><button class="chip" data-f="sum">Summer League <b>2</b></button><button class="chip" data-f="ms">Middle School <b>4</b></button><button class="chip" data-f="mys">MYS <b>11</b></button><button class="chip" data-f="club">Club <b>6</b></button></div>
+  <section class="year" data-year="2026"><h2>2026<small>3 albums</small></h2><div class="grid"><a class="card" data-org="hs" href="https://photos.app.goo.gl/CRBj5xxTW3XtZm6p9" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs26-bv.jpg" alt="MHS Boys Varsity — 2026 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2026</div>
+    <div class="team">MHS Boys Varsity</div>
+    <div class="title">2026 Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">244 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://photos.google.com/share/AF1QipPk2wE91zvG6TCCvnlscOPtzAqL5RuZCOwCRcVBbXUUAYCiO9KYxI0lVM3QjJSDrQ?key=MGRRRVlRaV9BNHBYbDhQSE1jeVVhTHVrdGg3OVF3" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs26-gjv.jpg" alt="MHS Girls JV — 2026 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2026</div>
+    <div class="team">MHS Girls JV</div>
+    <div class="title">2026 Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">231 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://photos.app.goo.gl/dSVeTR5byp5LRX5e8" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs26-gv.jpg" alt="MHS Girls Varsity — 2026 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2026</div>
+    <div class="team">MHS Girls Varsity</div>
+    <div class="title">2026 Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">300+ photos</span></div>
+  </div>
+</a></div></section>
+<section class="year" data-year="2025"><h2>2025<small>8 albums</small></h2><div class="grid"><a class="card" data-org="hs" href="https://www.icloud.com/sharedalbum/#B20JqWzChGrayhi" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs25-bjv.jpg" alt="MHS Boys JV — 2025 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2025</div>
+    <div class="team">MHS Boys JV</div>
+    <div class="title">2025 Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">141 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://www.icloud.com/sharedalbum/#B20GOnmqtJ15lOV" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs25-bv.jpg" alt="MHS Boys Varsity — 2025 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2025</div>
+    <div class="team">MHS Boys Varsity</div>
+    <div class="title">2025 Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">559 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://www.icloud.com/sharedalbum/#B205IRuBxwjRnP" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs25-gjv.jpg" alt="MHS Girls JV — 2025 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2025</div>
+    <div class="team">MHS Girls JV</div>
+    <div class="title">2025 Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">165 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://www.icloud.com/sharedalbum/#B20595X5HZu9xR" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs25-gv-jam.jpg" alt="MHS Girls Varsity — 2025 Fitchburg Jamboree" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2025</div>
+    <div class="team">MHS Girls Varsity</div>
+    <div class="title">2025 Fitchburg Jamboree</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">147 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://www.icloud.com/sharedalbum/#B20GVU1CZGjjc0Y" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs25-gv.jpg" alt="MHS Girls Varsity — 2025 Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2025</div>
+    <div class="team">MHS Girls Varsity</div>
+    <div class="title">2025 Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">123 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="club" href="https://www.icloud.com/sharedalbum/#B205S2ms93M78j" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/club25-everton-fd.jpg" alt="RBFC Everton 2008 Boys — 2025 Father&#x27;s Day Tournament" loading="lazy"><span class="org club">Club</span></div>
+  <div class="body">
+    <div class="season">Spring 2025</div>
+    <div class="team">RBFC Everton 2008 Boys</div>
+    <div class="title">2025 Father&#x27;s Day Tournament</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">222 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="club" href="https://www.icloud.com/sharedalbum/#B20GZYbYHGxbjXe" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/club25-everton.jpg" alt="RBFC Everton 2008 Boys — 2025 Highlights" loading="lazy"><span class="org club">Club</span></div>
+  <div class="body">
+    <div class="season">Spring 2025</div>
+    <div class="team">RBFC Everton 2008 Boys</div>
+    <div class="title">2025 Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">794 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="club" href="https://www.icloud.com/sharedalbum/#B20G1qNHBJfteFo" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/club25-strikers.jpg" alt="Strikers United 2010 Girls — Spring 2025" loading="lazy"><span class="org club">Club</span></div>
+  <div class="body">
+    <div class="season">Spring 2025</div>
+    <div class="team">Strikers United 2010 Girls</div>
+    <div class="title">Spring 2025</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">155 photos</span></div>
+  </div>
+</a></div></section>
+<section class="year" data-year="2024"><h2>2024<small>5 albums</small></h2><div class="grid"><a class="card" data-org="hs" href="https://www.icloud.com/sharedalbum/#B20Gtue8VfpvpY" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs24-bv.jpg" alt="MHS Boys Varsity — 2024 Season" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2024</div>
+    <div class="team">MHS Boys Varsity</div>
+    <div class="title">2024 Season</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">616 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="club" href="https://www.icloud.com/sharedalbum/#B0x5epZ6aWJE2i" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/club24f-strikers.jpg" alt="Strikers United 2010 Girls — Fall 2024" loading="lazy"><span class="org club">Club</span></div>
+  <div class="body">
+    <div class="season">Fall 2024</div>
+    <div class="team">Strikers United 2010 Girls</div>
+    <div class="title">Fall 2024</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">318 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="sum" href="https://www.icloud.com/sharedalbum/#B20GCATCnG4e5wz" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/sum24.jpg" alt="French River Summer League — 2024 Summer Highlights" loading="lazy"><span class="org sum">Summer League</span></div>
+  <div class="body">
+    <div class="season">Summer 2024</div>
+    <div class="team">French River Summer League</div>
+    <div class="title">2024 Summer Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">353 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="club" href="https://www.icloud.com/sharedalbum/#B0xGnbeumJGX3v1" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/club24s-strikers.jpg" alt="Strikers United 2010 Girls — Spring 2024" loading="lazy"><span class="org club">Club</span></div>
+  <div class="body">
+    <div class="season">Spring 2024</div>
+    <div class="team">Strikers United 2010 Girls</div>
+    <div class="title">Spring 2024</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">487 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="club" href="https://www.icloud.com/sharedalbum/#B0x5O3DjHA4aSi" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/club24-everton.jpg" alt="RBFC Everton 2008 Boys — 2024 Highlights" loading="lazy"><span class="org club">Club</span></div>
+  <div class="body">
+    <div class="season">2024</div>
+    <div class="team">RBFC Everton 2008 Boys</div>
+    <div class="title">2024 Highlights</div>
+    <div class="foot"><span class="src ic">iCloud</span><span class="cnt">613 photos</span></div>
+  </div>
+</a></div></section>
+<section class="year" data-year="2023"><h2>2023<small>11 albums</small></h2><div class="grid"><a class="card" data-org="hs" href="https://photos.google.com/share/AF1QipN0gUAsl-XBnD1Z5aYzY-B3L1JgEKW0jtC9DVELodc7Cq0M_PucPQJnwQAM_OS4wA?key=eV9FRzB0TkFjb1d5TlJzUTJmbklNTVU5TWZXQ3dB" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs23-b-all.jpg" alt="MHS Boys JV &amp; Varsity — 2023 Season Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2023</div>
+    <div class="team">MHS Boys JV &amp; Varsity</div>
+    <div class="title">2023 Season Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">300+ photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="hs" href="https://photos.google.com/share/AF1QipPjy9TWcZX-lOQLdAWaOfIEMm5UB5a9igBVN0rMEywV_ZBCMNDtSYYG1CL_56tx5Q?key=ZWlITXk0NDg4cXJLSmdSQ1FlUklET0tneG9PUm13" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs23-bv-cmass.jpg" alt="MHS Boys Varsity — 2023 Varsity CMass Tournament" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2023</div>
+    <div class="team">MHS Boys Varsity</div>
+    <div class="title">2023 Varsity CMass Tournament</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">55 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="ms" href="https://photos.app.goo.gl/XLAesfNXWJTGZZS39" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/ms23-b.jpg" alt="Fowler MS Boys — 2023 Highlights" loading="lazy"><span class="org ms">Middle School</span></div>
+  <div class="body">
+    <div class="season">Fall 2023</div>
+    <div class="team">Fowler MS Boys</div>
+    <div class="title">2023 Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">65 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="ms" href="https://photos.app.goo.gl/v4ouqfYm3185PXd4A" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/ms23-g.jpg" alt="Fowler MS Girls — 2023 Highlights" loading="lazy"><span class="org ms">Middle School</span></div>
+  <div class="body">
+    <div class="season">Fall 2023</div>
+    <div class="team">Fowler MS Girls</div>
+    <div class="title">2023 Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">226 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.app.goo.gl/rquwLTnmNiSftzeG9" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys23-g56o.jpg" alt="MYS G56 Orange — 2023 Highlights" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Fall 2023</div>
+    <div class="team">MYS G56 Orange</div>
+    <div class="title">2023 Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">71 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.app.goo.gl/v7EgHJ1YhPz2DfN16" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/sb-2023-0429.jpg" alt="MYS B910 — 2023-04-29 Game" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2023</div>
+    <div class="team">MYS B910</div>
+    <div class="title">2023-04-29 Game</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">151 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.app.goo.gl/bdTsGC2aW3RgpCb17" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/sb-2023-0507.jpg" alt="MYS B910 — 2023-05-07 @ Littleton" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2023</div>
+    <div class="team">MYS B910</div>
+    <div class="title">2023-05-07 @ Littleton</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">54 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.app.goo.gl/mBQDn6Hn9F9FQKPKA" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/sb-2023-0514.jpg" alt="MYS B910 — 2023-05-14 @ Harvard" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2023</div>
+    <div class="team">MYS B910</div>
+    <div class="title">2023-05-14 @ Harvard</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">118 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.google.com/share/AF1QipMREtaaKqHjOWaoSw8xSkKtU-XSm33-JVkbnGF4_bkiFb8YNorLOEittXb6Jw4uIQ?key=dmotdlo3c0lvN0szeV9pamNqeEtEUlNGVW5nNnR3" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys23-b910-0611.jpg" alt="MYS B910 — 2023-06-11 vs Ayer-Shirley" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2023</div>
+    <div class="team">MYS B910</div>
+    <div class="title">2023-06-11 vs Ayer-Shirley</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">101 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.app.goo.gl/iSFxUSmdWswjKrLS6" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys23-b910-ncup.jpg" alt="MYS B910 — 2023-06-18 NCup" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2023</div>
+    <div class="team">MYS B910</div>
+    <div class="title">2023-06-18 NCup</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">206 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.app.goo.gl/fa8vS9SuH2AdwnYq9" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys23-b910-mtoc.jpg" alt="MYS B910 — 2023-06-23 MTOC" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2023</div>
+    <div class="team">MYS B910</div>
+    <div class="title">2023-06-23 MTOC</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">196 photos</span></div>
+  </div>
+</a></div></section>
+<section class="year" data-year="2022"><h2>2022<small>4 albums</small></h2><div class="grid"><a class="card" data-org="hs" href="https://photos.google.com/share/AF1QipOt4AGXizPRKwXE4kUv5aU6I7WEiuRI0ayPCha1qH5QcDjLZPXJZx16OrsBV8U3pw?key=NG9JcHNRdmRBT3NPSW5vek95MEtOLTl2cFpQMnVn" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/hs22-jv.jpg" alt="MHS Boys JV — 2022 JV Highlights" loading="lazy"><span class="org hs">High School</span></div>
+  <div class="body">
+    <div class="season">Fall 2022</div>
+    <div class="team">MHS Boys JV</div>
+    <div class="title">2022 JV Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">101 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="sum" href="https://photos.app.goo.gl/m8jGeLBtrxt4AzDr7" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/sum22.jpg" alt="Summer League — 2022 Summer Highlights" loading="lazy"><span class="org sum">Summer League</span></div>
+  <div class="body">
+    <div class="season">Summer 2022</div>
+    <div class="team">Summer League</div>
+    <div class="title">2022 Summer Highlights</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">269 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="ms" href="https://photos.google.com/share/AF1QipPKE3RZRFcyRYZDIka12y6GQPhp8uXZvfDw5EZ1iHs0oM9f37-s7pe2uXbQcHmiBA?key=Z2ZvSFhuYjIwcnU4QUt6N2JwVEp6eFl1cERVUTd3" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/ms22-grad.jpg" alt="Fowler 8th Grade — 2022-06-20 8th Grade Graduation" loading="lazy"><span class="org ms">Middle School</span></div>
+  <div class="body">
+    <div class="season">Spring 2022</div>
+    <div class="team">Fowler 8th Grade</div>
+    <div class="title">2022-06-20 8th Grade Graduation</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">300+ photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.google.com/share/AF1QipMYQQzklSHIv9PMYAyaCBkr4sZqttYiGV7bupT3sBn5hXLOtaXHs9I0heHKBlPwCQ?key=RlRLcWFCUFR0bnFKQlhwc0M1Y1FDblU0THJ6MzFR" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys22-b78o.jpg" alt="MYS B78 Orange — 2022-04-10 Game #1" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2022</div>
+    <div class="team">MYS B78 Orange</div>
+    <div class="title">2022-04-10 Game #1</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">45 photos</span></div>
+  </div>
+</a></div></section>
+<section class="year" data-year="2021"><h2>2021<small>4 albums</small></h2><div class="grid"><a class="card" data-org="ms" href="https://photos.google.com/share/AF1QipOgH83j_kvgoQ3tNToUq7FMyovm5RWaOD8uXytWuVMN2vTDN5m5LhpJmuYfOB4vvw?key=U2R2MFUyRFRDZXBwZU5qcEhfRXEyU21lSDh5QUtn" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/ms21-brom.jpg" alt="Fowler MS Boys — 2021-10-14 @ Bromfield" loading="lazy"><span class="org ms">Middle School</span></div>
+  <div class="body">
+    <div class="season">Fall 2021</div>
+    <div class="team">Fowler MS Boys</div>
+    <div class="title">2021-10-14 @ Bromfield</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">40 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.google.com/share/AF1QipOP93YcG0W26Se0jehnQ1oHKuMawJsaxSJmmTvTFn3I6AmLeJBTH-LbzvHlEUMT8w?key=Qm5QUXlET2hwa0hRR1J6eDd0SFZHMTQ5bHZyWWR3" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys21-b78-g1.jpg" alt="MYS B78 — 2021-04-24 Game #1" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2021</div>
+    <div class="team">MYS B78</div>
+    <div class="title">2021-04-24 Game #1</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">55 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.google.com/share/AF1QipMcCa2muEa7rmJT7j2PqubaSY0exHcNLqfaKkJDg1StF5iXYALHUtBeylSqXYcDkw?key=TGR2MnhjNlRXbWJEUVkxMzBQRkVKMndNckR6Szl3" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys21-b78-g2.jpg" alt="MYS B78 — 2021-05-01 Game 2" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2021</div>
+    <div class="team">MYS B78</div>
+    <div class="title">2021-05-01 Game 2</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">49 photos</span></div>
+  </div>
+</a>
+<a class="card" data-org="mys" href="https://photos.google.com/share/AF1QipPmtHFm4HowZEIMAIzAF1_Z7CO0gI9e-_-tUqyC62wWVrDzxINpr34fF0cCXgbQFg?key=cVVBQ1dkLU5HMk5CUGNnOExtM1VjTEFIYnpSOUh3" target="_blank" rel="noopener">
+  <div class="pic"><img src="covers/mys21-b78-g7.jpg" alt="MYS B78 — 2021-06-12 Game 7" loading="lazy"><span class="org mys">MYS</span></div>
+  <div class="body">
+    <div class="season">Spring 2021</div>
+    <div class="team">MYS B78</div>
+    <div class="title">2021-06-12 Game 7</div>
+    <div class="foot"><span class="src gp">Google Photos</span><span class="cnt">59 photos</span></div>
+  </div>
+</a></div></section>
+  <p class="bottom">Links are unlisted: anyone with the link can view, and they can't be found by searching. Please share only with team families and friends.</p>
+</main>
+<script>
+document.getElementById('filters').addEventListener('click',e=>{
+  const b=e.target.closest('.chip'); if(!b) return;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c===b));
+  const f=b.dataset.f;
+  document.querySelectorAll('.card').forEach(c=>c.classList.toggle('hide',f!=='all'&&c.dataset.org!==f));
+  document.querySelectorAll('.year').forEach(y=>y.classList.toggle('hide',!y.querySelector('.card:not(.hide)')));
+});
+</script>
+</body>
+</html>
