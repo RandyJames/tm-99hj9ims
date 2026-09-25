@@ -60,6 +60,36 @@
   .sb-chip.off b{color:#6f8a7c}
   .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
   @media (max-width:820px){ .layout{grid-template-columns:1fr} }
+  /* ---------- phone layout ---------- */
+  @media (max-width:560px){
+    .wrap{padding:12px 12px 32px}
+    .sub{font-size:12px;line-height:1.45}
+    .controls{gap:8px}
+    .rostersw,.halfsw{padding:3px;gap:3px}
+    .roster,.half{padding:7px 13px;font-size:13px}
+    .act{padding:8px 11px;font-size:12px}
+    .formpick{padding:4px 10px;font-size:12px}
+    .count{margin-left:0;font-size:13px;padding:7px 12px}
+    /* tall pitch + narrow columns so all 11 spots get room and don't collide */
+    .layout>*{min-width:0}
+    .pitch{aspect-ratio:auto;height:183vw;min-height:600px;max-height:780px}
+    .pos{width:24%}
+    .pos .plabel{font-size:9.5px;letter-spacing:.2px;margin-bottom:2px}
+    .slot{height:44px;margin:2px 0;border-radius:7px}
+    .slot.backup,.slot.backup.empty{height:36px}
+    /* on the field, stack number over name so the whole chip width shows the name */
+    .pos .chip{flex-direction:column;gap:0;padding:2px;justify-content:center;text-align:center;border-radius:6px}
+    .pos .chip .num{width:19px;height:19px;font-size:11px;border-radius:5px}
+    .pos .chip .nm{white-space:normal;line-height:1.02;font-size:10px;max-height:2.1em;overflow:hidden}
+    .pos .chip .sw,.pos .chip .up{display:none}
+    /* bench stays a normal readable list */
+    .bench{position:static}
+    .bench .chip{height:40px;font-size:14px}
+    .bench .chip .num{width:24px;height:24px;font-size:13px}
+  }
+  @media (max-width:380px){
+    .pos .chip .nm{font-size:9.5px}
+  }
 
   .pitch-shell{background:var(--board);border:1px solid #243f30;border-radius:16px;padding:14px;border-top:4px solid var(--accent);transition:border-color .2s}
   .halftag{font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:1px;color:var(--accent);margin:0 0 10px 2px;transition:color .2s}
