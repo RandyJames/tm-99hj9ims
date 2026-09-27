@@ -67,10 +67,6 @@ a{color:inherit}
 .cell .aa{display:inline-block;font-size:10px;font-weight:800;padding:0 4px;border-radius:3px;border:1px solid var(--c);color:var(--c);margin-right:4px;vertical-align:1px}
 .cell .nt{display:block;font-size:11px;color:var(--orange-d);font-weight:600}
 .none{color:var(--line);font-size:16px}
-.cell.off{border-left-color:var(--line);opacity:.62}
-.cell.off b{text-decoration:line-through;text-decoration-thickness:2px;color:var(--mute)}
-.cell.off .tm{text-decoration:line-through}
-.cell .offtag{display:inline-block;margin-top:3px;font-size:10px;font-weight:800;letter-spacing:.5px;padding:1px 6px;border-radius:999px;background:var(--loss-bg);color:var(--loss)}
 .legend{font-size:13px;color:var(--mute);margin:10px 0 0}
 .panel{display:none} .panel.on{display:block}
 .teamhead{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:12px 0 6px}
@@ -114,7 +110,6 @@ a{color:inherit}
 .date .day{font-size:22px;font-weight:800}
 .date .mon{font-size:12px;font-weight:600}
 .opp{font-weight:700;font-size:17px}
-.opp.offopp{text-decoration:line-through;text-decoration-thickness:2px;color:var(--mute)}
 .meta{font-size:13px;color:var(--mute)}
 .meta .note{color:var(--orange-d);font-weight:600}
 .res{font-weight:800;padding:6px 10px;border-radius:8px;text-align:center;min-width:64px;font-size:15px}
@@ -183,6 +178,7 @@ function render(){
     const list = p.querySelector('.games');
     let nextMarked = false;
     const rows = t.games.filter(g => {
+      if(isOff(g)) return false;
       if(filter==='video') return g.v.length>0;
       if(filter==='home') return g.ha==='H';
       if(filter==='away') return g.ha==='A';
@@ -194,7 +190,7 @@ function render(){
       const vids = g.v.map(v => `<a class="btn ${v.k}" href="${v.u}" target="_blank" rel="noopener">${ {clip:'✂️',yt:'▶️',veo:'🎥',wavm:'📺'}[v.k] } ${v.l}</a>`).join('');
       return `<div class="game ${isNext?'next':''}">
         <div class="date"><div class="dow">${f.dow}</div><div class="day">${f.day}</div><div class="mon">${f.mon}</div></div>
-        <div><div class="opp${isOff(g)?' offopp':''}"><span class="ha ${g.ha}">${g.ha==='H'?'HOME':'AWAY'}</span>${g.ha==='H'?'vs':'@'} ${g.opp}</div>
+        <div><div class="opp"><span class="ha ${g.ha}">${g.ha==='H'?'HOME':'AWAY'}</span>${g.ha==='H'?'vs':'@'} ${g.opp}</div>
              <div class="meta">${g.t} ${fldTag(g,false)}${isNext?' · <span class="nextbadge">NEXT GAME</span>':''}${(g.n && !scrim)?' · <span class="note">'+g.n+'</span>':''}${scrim?' · <span class="scrimbadge">SCRIMMAGE · not in record</span>':''}${(!g.v.length && f.past && g.r && g.r!=='TBD' && g.r!=='Canceled' && !g.r.startsWith('PPD'))?' · no video':''}</div></div>
         <div class="res ${rc}">${g.r || (f.past?'—':'upcoming')}</div>
         <div class="vids">${vids}</div>
@@ -206,25 +202,25 @@ function render(){
 
 /* ---------- combined schedule (all teams, one row per date) ---------- */
 function buildSchedule(){
-  const dates = [...new Set(TEAMS.flatMap(t => t.games.map(g => g.d)))].sort();
+  const live = t => t.games.filter(g => !isOff(g));
+  const dates = [...new Set(TEAMS.flatMap(t => live(t).map(g => g.d)))].sort();
   const head = `<thead><tr><th class="dt">Date</th>${
       TEAMS.map(t=>`<th class="t" style="--c:${t.color}">${t.name.replace('Junior Varsity','JV')}</th>`).join('')
     }</tr></thead>`;
   let nextMarked = false;
   const body = dates.map(d => {
     const f = fmt(d);
-    const dayGames = TEAMS.map(t => t.games.filter(g => g.d === d));
+    const dayGames = TEAMS.map(t => live(t).filter(g => g.d === d));
     const anyUpcoming = dayGames.some((gs,i) => gs.some(g => !fmt(g.d).past && !g.r));
     const isNext = !nextMarked && anyUpcoming; if(isNext) nextMarked = true;
     if(schedFilter==='upcoming' && f.past) return '';
     const cells = dayGames.map((gs,i) => {
       const t = TEAMS[i];
       if(!gs.length) return `<td><span class="none">·</span></td>`;
-      return `<td>` + gs.map(g => `<div class="cell ${isOff(g)?'off':''}" style="--c:${t.color}">
+      return `<td>` + gs.map(g => `<div class="cell" style="--c:${t.color}">
           <b><span class="${g.ha==='H'?'hh':'aa'}">${g.ha}</span>${g.ha==='H'?'vs':'@'} ${g.opp}</b>
           <span class="tm">${g.t}</span>
           ${fldTag(g,true)}
-          ${isOff(g)?`<span class="offtag">${g.r==='Canceled'?'CANCELED':'POSTPONED'}</span>`:''}
           ${g.n?`<span class="nt">${g.n}</span>`:''}
         </div>`).join('') + `</td>`;
     }).join('');
