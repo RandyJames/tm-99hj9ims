@@ -51,6 +51,9 @@ a{color:inherit}
 .sched th,.sched td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
 .sched thead th{position:sticky;top:0;background:var(--paper);z-index:2;font-size:12px;letter-spacing:.4px;text-transform:uppercase;white-space:nowrap;border-bottom:3px solid var(--line)}
 .sched thead th.t{border-bottom-color:var(--c);color:var(--c)}
+.sched thead th{will-change:transform}
+.sched thead.stuck th{box-shadow:0 6px 10px -6px rgba(0,0,0,.35)}
+.sched thead th.dt{z-index:3}
 .sched tbody tr:hover{background:var(--bg)}
 .sched tr.past td{opacity:.45}
 .sched tr.nextrow td{background:var(--rowhi)}
@@ -336,6 +339,7 @@ function renderOpps(){
 function renderSchedule(){
   sp.innerHTML = buildSchedule();
   sp.querySelectorAll('.schip').forEach(c => c.onclick = () => { schedFilter = c.dataset.s; renderSchedule(); });
+  if(typeof queueStick==='function') queueStick();
 }
 
 document.querySelectorAll('.chip[data-f]').forEach(c => c.onclick = () => { filter = c.dataset.f; document.querySelectorAll('.chip[data-f]').forEach(x=>x.classList.toggle('on', x.dataset.f===filter)); render(); });
@@ -344,9 +348,28 @@ function select(key){
   document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.key===key));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id==='p-'+key));
   try{ history.replaceState(null,'','#'+key); }catch(e){}
+  if(typeof queueStick==='function') queueStick();
 }
+/* ---------- keep the Full Schedule header row pinned under the tab bar ---------- */
+let stickRaf = 0;
+function stickHead(){
+  stickRaf = 0;
+  const tbl = sp.querySelector('.sched'); if(!tbl) return;
+  const thead = tbl.tHead; const ths = thead.querySelectorAll('th');
+  if(!sp.classList.contains('on')){ ths.forEach(t => t.style.transform=''); return; }
+  const top = tabs.getBoundingClientRect().bottom + 2;
+  const r = tbl.getBoundingClientRect(); const hh = thead.getBoundingClientRect().height;
+  const lastRow = tbl.tBodies[0].lastElementChild; const lh = lastRow ? lastRow.getBoundingClientRect().height : 0;
+  const off = Math.max(0, Math.min(top - r.top, r.height - hh - lh));
+  ths.forEach(t => t.style.transform = off ? `translateY(${Math.round(off)}px)` : '');
+  thead.classList.toggle('stuck', off > 0);
+}
+function queueStick(){ if(!stickRaf) stickRaf = requestAnimationFrame(stickHead); }
+window.addEventListener('scroll', queueStick, {passive:true});
+window.addEventListener('resize', queueStick, {passive:true});
 renderSchedule();
 render();
+queueStick();
 renderOpps();
 select('bv');
 const h = location.hash.replace('#',''); if(VIEWS.some(v=>v.key===h)) select(h);
